@@ -4,17 +4,19 @@ require __DIR__ . '/bootstrap.php';
 
 // GET ?id=N        → ảnh của một lần phân tích (chỉ chủ sở hữu hoặc admin)
 // GET ?ref=N       → ảnh mẫu (chỉ admin)
+// GET ?bench=N     → ảnh kiểm tra độ chính xác (chỉ admin)
 
 require_method('GET');
 $user = require_user();
 $pdo = Db::pdo();
 
-if (isset($_GET['ref'])) {
+if (isset($_GET['ref']) || isset($_GET['bench'])) {
     if ($user['role'] !== 'admin') {
         json_error('Bạn không có quyền truy cập.', 403);
     }
-    $stmt = $pdo->prepare('SELECT path FROM reference_images WHERE id = ?');
-    $stmt->execute([(int) $_GET['ref']]);
+    $table = isset($_GET['bench']) ? 'eval_images' : 'reference_images';
+    $stmt = $pdo->prepare("SELECT path FROM {$table} WHERE id = ?");
+    $stmt->execute([(int) ($_GET['bench'] ?? $_GET['ref'])]);
 } else {
     $stmt = $pdo->prepare('SELECT image_path AS path FROM analyses WHERE id = ? AND (user_id = ? OR ? = 1)');
     $stmt->execute([(int) ($_GET['id'] ?? 0), $user['id'], $user['role'] === 'admin' ? 1 : 0]);

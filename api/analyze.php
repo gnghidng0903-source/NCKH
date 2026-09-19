@@ -33,41 +33,12 @@ if (!$catalog) {
     json_error('Chưa có danh mục sản phẩm (config/products.json).', 500);
 }
 
-// Ảnh mẫu: lấy mẫu đều theo thang độ ẩm, xác định (giữ nguyên giữa các lần gọi để tận dụng prompt caching).
 $pdo = Db::pdo();
-$maxRefs = max(0, (int) cfg('limits.max_reference_images', 6));
-$refRows = $maxRefs > 0 ? $pdo->query('SELECT * FROM reference_images ORDER BY hydration_pct, id')->fetchAll() : [];
-if (count($refRows) > $maxRefs) {
-    $picked = [];
-    for ($i = 0; $i < $maxRefs; $i++) {
-        $picked[] = $refRows[(int) round($i * (count($refRows) - 1) / max(1, $maxRefs - 1))];
-    }
-    $refRows = $picked;
-}
-$references = [];
-foreach ($refRows as $r) {
-    $bytes = Storage::read($r['path']);
-    if ($bytes !== null) {
-        $references[] = [
-            'jpeg'             => $bytes,
-            'hydration_pct'    => (int) $r['hydration_pct'],
-            'pigmentation_pct' => (int) $r['pigmentation_pct'],
-            'oil_pct'          => (int) $r['oil_pct'],
-            'notes'            => (string) $r['notes'],
-        ];
-    }
-}
+$references = References::load((int) cfg('limits.max_reference_images', 6));
 
 $remaining = RateLimit::consumeAnalysis((int) $user['id'], (int) cfg('limits.analyses_per_day', 5));
 
-$analyzer = match (cfg('analyzer', 'claude')) {
-    'custom' => new CustomModelAnalyzer((string) cfg('custom_model.endpoint', ''), (string) cfg('custom_model.token', '')),
-    default  => new ClaudeAnalyzer(
-        (string) cfg('anthropic.api_key', ''),
-        (string) cfg('anthropic.model', 'claude-sonnet-5'),
-        (int) cfg('anthropic.timeout', 90)
-    ),
-};
+$analyzer = AnalyzerFactory::make();
 
 try {
     $raw = $analyzer->analyze($jpeg, $answers, $catalog, $references);

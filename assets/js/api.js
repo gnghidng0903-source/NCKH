@@ -150,6 +150,15 @@
     adminList() { return req("admin.php"); },
     adminAdd(form) { return req("admin.php?action=add", { method: "POST", form }); },
     adminDelete(id) { return req(`admin.php?action=delete&id=${encodeURIComponent(id)}`, { method: "POST", json: {} }); },
+
+    // Chấm độ chính xác (admin)
+    benchList() { return req("benchmark.php"); },
+    benchAdd(form) { return req("benchmark.php?action=add", { method: "POST", form }); },
+    benchDelete(id) { return req(`benchmark.php?action=delete&id=${encodeURIComponent(id)}`, { method: "POST", json: {} }); },
+    benchStart(payload) { return req("benchmark.php?action=start", { method: "POST", json: payload }); },
+    benchScore(runId, imageId) { return req(`benchmark.php?action=score&run_id=${encodeURIComponent(runId)}&image_id=${encodeURIComponent(imageId)}`, { method: "POST", json: {} }); },
+    benchFinish(runId) { return req(`benchmark.php?action=finish&run_id=${encodeURIComponent(runId)}`, { method: "POST", json: {} }); },
+    benchDeleteRun(id) { return req(`benchmark.php?action=delete_run&id=${encodeURIComponent(id)}`, { method: "POST", json: {} }); },
   };
 
   window.Api = Api;

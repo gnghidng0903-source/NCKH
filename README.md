@@ -13,7 +13,7 @@ Người dùng tải ảnh khuôn mặt + trả lời vài câu hỏi → AI ư�
 
 ```
 index.html, app.html        Giao diện (đăng nhập / phân tích – lịch sử – báo cáo)
-admin/                      Quản lý ảnh mẫu (chỉ tài khoản admin)
+admin/                      Quản lý ảnh mẫu + chấm độ chính xác AI (chỉ tài khoản admin)
 assets/                     CSS + JS
 api/                        Endpoint PHP (auth, analyze, history, image, admin) + lib/
 config/config.example.php   Mẫu cấu hình (config.php thật KHÔNG commit)
@@ -73,6 +73,19 @@ Sau đó vào `/admin/` để tải ảnh mẫu đã gán nhãn (độ ẩm/sắ
 - Chất lượng phụ thuộc vào **độ chính xác của nhãn** bạn gán: nên có chuyên gia/thiết bị đo đối chiếu.
 - Prompt caching được bật cho phần ảnh mẫu + danh mục sản phẩm để giảm chi phí các lần gọi sau.
 - **Giai đoạn 2:** khi có đủ dữ liệu có nhãn (hàng trăm–nghìn ảnh, kèm sự đồng ý của người dùng), huấn luyện model riêng và cài vào `CustomModelAnalyzer`, rồi đặt `'analyzer' => 'custom'` trong config.
+
+## Chấm độ chính xác của AI (`/admin/benchmark.html`)
+
+Cho AI phân tích một **bộ ảnh kiểm tra có nhãn thật** rồi so kết quả với nhãn, để biết AI lệch bao nhiêu điểm.
+
+1. Vào `/admin/benchmark.html` (tài khoản admin), thêm **≥ 20 ảnh kiểm tra** cùng nhãn thật (độ ẩm/sắc tố/độ dầu, tốt nhất đo bằng thiết bị). Ảnh kiểm tra lưu ở bảng riêng nên **không bao giờ** bị gửi kèm làm ảnh mẫu — nhưng hãy dùng người khác với ảnh mẫu.
+2. Bấm **Chạy đánh giá**. Trình duyệt gọi máy chủ chấm từng ảnh một (mỗi ảnh = 1 lượt gọi Claude API, có phí); lỗi tạm thời được tự thử lại một lần.
+3. Đọc kết quả: sai số trung bình (MAE), lệch hệ thống (AI chấm cao/thấp hơn thực tế), tỷ lệ trong ±5/±10 điểm, hệ số tương quan, biểu đồ nhãn thật – AI chấm và bảng từng ảnh.
+4. Đổi ảnh mẫu hoặc prompt rồi chạy lại: mỗi lần chạy được lưu và so sánh với lần trước ("tốt hơn/kém hơn X điểm"). Bỏ chọn *Dùng ảnh mẫu* để có lần chạy đối chứng, cho biết ảnh mẫu có thật sự giúp ích không.
+
+Khi bạn chuyển sang model tự huấn luyện (`'analyzer' => 'custom'`), cùng bộ ảnh kiểm tra này dùng để so model mới với Claude.
+
+> Nếu đã import `sql/schema.sql` từ trước, hãy import lại file này (dùng `CREATE TABLE IF NOT EXISTS`, an toàn) để có thêm 3 bảng `eval_*`.
 
 ## Chi phí & giới hạn
 - Mỗi lượt phân tích = 1 lần gọi Claude API (có ảnh) → có phí. Mặc định giới hạn `analyses_per_day = 5` lượt/người/24h (sửa trong `config.php`). Lỗi do hệ thống/AI sẽ không bị tính lượt.

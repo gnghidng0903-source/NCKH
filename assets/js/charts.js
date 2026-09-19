@@ -70,6 +70,28 @@
       );
     },
 
+    // Scatter "nhãn thật (x) — AI chấm (y)". Đường chéo = chấm chuẩn; dải mờ = sai lệch ±10 điểm.
+    scatter(el, points, title) {
+      const S = 240, L = 30, B = 26, T = 8, Rr = 8;
+      const px = (v) => L + ((S - L - Rr) * v) / 100;
+      const py = (v) => T + (S - T - B) * (1 - v / 100);
+      let g = `<polygon points="${f(px(0))},${f(py(10))} ${f(px(90))},${f(py(100))} ${f(px(100))},${f(py(100))} ${f(px(100))},${f(py(90))} ${f(px(10))},${f(py(0))} ${f(px(0))},${f(py(0))}" fill="rgba(47,158,107,.10)"/>`;
+      [0, 25, 50, 75, 100].forEach((v) => {
+        g += `<line x1="${L}" x2="${S - Rr}" y1="${f(py(v))}" y2="${f(py(v))}" stroke="rgba(90,60,110,.10)"/>
+              <line y1="${T}" y2="${S - B}" x1="${f(px(v))}" x2="${f(px(v))}" stroke="rgba(90,60,110,.10)"/>
+              <text x="${L - 5}" y="${f(py(v) + 3)}" text-anchor="end" font-size="9" fill="#8b8196">${v}</text>
+              <text x="${f(px(v))}" y="${S - B + 13}" text-anchor="middle" font-size="9" fill="#8b8196">${v}</text>`;
+      });
+      g += `<line x1="${f(px(0))}" y1="${f(py(0))}" x2="${f(px(100))}" y2="${f(py(100))}" stroke="#2f9e6b" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+      points.forEach((p) => {
+        const ok = Math.abs(p.p - p.t) <= 10;
+        g += `<circle cx="${f(px(p.t))}" cy="${f(py(p.p))}" r="4" fill="${ok ? "#e8722f" : "#d64545"}" fill-opacity=".75" stroke="#fff" stroke-width="1"/>`;
+      });
+      g += `<text x="${f((L + S - Rr) / 2)}" y="${S - 2}" text-anchor="middle" font-size="9" fill="#5d5368">Nhãn thật</text>
+            <text transform="translate(9 ${f((T + S - B) / 2)}) rotate(-90)" text-anchor="middle" font-size="9" fill="#5d5368">AI chấm</text>`;
+      el.innerHTML = svg(`0 0 ${S} ${S}`, g, title);
+    },
+
     // points: [{date, hydration, overall}] tăng dần theo thời gian.
     trend(el, points) {
       if (points.length < 2) {

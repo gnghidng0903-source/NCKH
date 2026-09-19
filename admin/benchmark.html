@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chấm độ chính xác AI — SkinAI</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <div class="admin-wrap" style="max-width:1100px">
+    <nav class="admin-nav" aria-label="Quản trị">
+      <a href="../app.html">← Ứng dụng</a>
+      <a href="index.html">Ảnh mẫu</a>
+      <a href="benchmark.html" aria-current="page">Chấm độ chính xác</a>
+    </nav>
+
+    <h1 class="page-title">Chấm độ chính xác của AI</h1>
+    <p class="page-sub">Cho AI phân tích một bộ ảnh kiểm tra đã có nhãn thật, rồi so kết quả với nhãn để biết AI lệch bao nhiêu điểm. Chạy lại sau mỗi lần đổi ảnh mẫu hoặc prompt để biết có tốt lên không.</p>
+
+    <div id="bench-error" class="alert alert-error" role="alert" hidden style="margin-bottom:16px"></div>
+
+    <section class="card" id="intro-card" style="margin-bottom:20px">
+      <h2 class="card-title" style="margin-bottom:10px">Để kết quả đáng tin</h2>
+      <ul class="tips" style="font-size:.88rem">
+        <li>Ảnh kiểm tra phải là ảnh <b>khác hẳn</b> ảnh mẫu — tốt nhất là <b>người khác</b>. Bảng ảnh kiểm tra tách riêng nên không bao giờ bị gửi kèm làm ảnh mẫu, nhưng nếu cùng một người xuất hiện ở cả hai, điểm sẽ đẹp hơn thực tế.</li>
+        <li>Nhãn thật nên đo bằng thiết bị hoặc do chuyên gia gán. Nhãn do bạn tự đoán chỉ cho biết AI có giống bạn không, không cho biết AI có đúng không.</li>
+        <li>Nên có <b>ít nhất 20 ảnh</b>, phủ đều mức ẩm/sắc tố và nhiều tông da. Dưới 20 ảnh, kết quả chỉ để tham khảo.</li>
+        <li>Mỗi ảnh = 1 lượt gọi Claude API (có phí). Phân tích chạy với bảng hỏi trống nên chỉ dựa vào ảnh.</li>
+      </ul>
+    </section>
+
+    <section class="card" id="run-card" style="margin-bottom:20px">
+      <h2 class="card-title" style="margin-bottom:6px">Chạy đánh giá</h2>
+      <p class="hint" id="run-summary" style="margin-bottom:14px">Đang tải…</p>
+      <label class="consent" style="margin-bottom:10px">
+        <input type="checkbox" id="use-refs" checked>
+        <span>Dùng ảnh mẫu như thực tế. <span class="muted">Bỏ chọn để chấm khi <b>không có</b> ảnh mẫu — so sánh hai lần chạy sẽ cho biết ảnh mẫu có thật sự giúp ích không.</span></span>
+      </label>
+      <div class="field" style="max-width:520px">
+        <label for="run-note">Ghi chú lần chạy (tuỳ chọn)</label>
+        <input class="input" id="run-note" type="text" maxlength="200" placeholder="Ví dụ: thêm 4 ảnh da sẫm màu vào ảnh mẫu">
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <button class="btn btn-primary" id="run-btn" type="button" disabled>Chạy đánh giá</button>
+        <button class="btn" id="cancel-btn" type="button" hidden>Dừng</button>
+        <span id="run-status" class="hint" role="status" aria-live="polite"></span>
+      </div>
+      <div class="progress" id="progress" hidden><i id="progress-bar"></i></div>
+    </section>
+
+    <section id="result-card" hidden style="margin-bottom:20px">
+      <div class="card">
+        <div class="card-head" style="align-items:flex-start;flex-wrap:wrap">
+          <div>
+            <h2 class="card-title" id="result-title">Kết quả</h2>
+            <p class="hint" id="result-sub"></p>
+          </div>
+          <div class="verdict" id="result-verdict"></div>
+        </div>
+        <div id="warn-box"></div>
+        <div class="tiles-3" id="stat-tiles"></div>
+        <div class="scatter-row" id="scatter-row"></div>
+        <p class="hint" style="margin:8px 0 16px">Mỗi chấm là một ảnh. Nằm trên đường chéo xanh = AI chấm đúng nhãn; nằm trong dải xanh nhạt = lệch không quá 10 điểm (chấm cam); chấm đỏ = lệch hơn 10 điểm.</p>
+        <div class="table-scroll">
+          <table class="data-table" id="result-table"></table>
+        </div>
+        <details class="howto-read" style="margin-top:16px">
+          <summary>Cách đọc các chỉ số</summary>
+          <ul>
+            <li><b>Sai số trung bình (MAE):</b> trung bình AI lệch bao nhiêu điểm so với nhãn thật. ≤ 8 là tốt, ≤ 12 chấp nhận được, &gt; 12 cần cải thiện (ngưỡng gợi ý, hãy điều chỉnh theo độ tin cậy của nhãn bạn dùng).</li>
+            <li><b>Lệch hệ thống:</b> nếu AI luôn chấm cao (hoặc thấp) hơn thực tế, thường sửa được bằng cách thêm ảnh mẫu ở vùng điểm bị lệch.</li>
+            <li><b>Trong ±10:</b> tỷ lệ ảnh mà AI lệch không quá 10 điểm.</li>
+            <li><b>Tương quan r (−1…1):</b> AI có xếp ảnh theo đúng thứ tự không, kể cả khi số điểm lệch. r cao mà MAE cao nghĩa là AI hiểu đúng xu hướng nhưng thang điểm bị lệch.</li>
+            <li><b>Bị từ chối:</b> ảnh mà AI cho là không có mặt hoặc chất lượng kém; không tính vào sai số nhưng nếu nhiều thì hãy kiểm tra lại ảnh kiểm tra.</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <section class="card" id="runs-card" style="margin-bottom:20px" hidden>
+      <h2 class="card-title" style="margin-bottom:12px">Lịch sử các lần chạy</h2>
+      <div class="table-scroll"><table class="data-table" id="runs-table"></table></div>
+    </section>
+
+    <section class="card" id="images-card">
+      <h2 class="card-title" style="margin-bottom:14px">Ảnh kiểm tra (<span id="img-count">0</span>)</h2>
+      <form id="add-form" novalidate>
+        <div class="field">
+          <label for="b-image">Ảnh (JPG/PNG/WebP)</label>
+          <input class="input" id="b-image" name="image" type="file" accept="image/jpeg,image/png,image/webp" required>
+        </div>
+        <div class="row">
+          <div class="field"><label for="b-h">Độ ẩm thật (%)</label><input class="input" id="b-h" name="hydration_pct" type="number" min="0" max="100" required></div>
+          <div class="field"><label for="b-p">Sắc tố thật (%)</label><input class="input" id="b-p" name="pigmentation_pct" type="number" min="0" max="100" required></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="b-o">Độ dầu thật (%)</label><input class="input" id="b-o" name="oil_pct" type="number" min="0" max="100" required></div>
+          <div class="field"><label for="b-n">Ghi chú (tuỳ chọn)</label><input class="input" id="b-n" name="notes" type="text" maxlength="500" placeholder="Ví dụ: đo corneometer 12/9, da sẫm"></div>
+        </div>
+        <button class="btn btn-primary" type="submit" id="add-btn">Thêm ảnh kiểm tra</button>
+      </form>
+      <div class="ref-grid" id="img-grid"></div>
+      <div class="empty" id="img-empty" hidden>Chưa có ảnh kiểm tra.</div>
+    </section>
+  </div>
+
+  <script>window.SKIN_CONFIG = { brand: "SkinAI", apiBase: "../api", demo: false };</script>
+  <script src="../assets/js/util.js"></script>
+  <script src="../assets/js/charts.js"></script>
+  <script src="../assets/js/image-tools.js"></script>
+  <script src="../assets/js/bench-metrics.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="benchmark.js"></script>
+</body>
+</html>
