@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SkinAI — Phân tích da bằng AI</title>
+  <meta name="description" content="Tải ảnh khuôn mặt, nhận phân tích độ ẩm, sắc tố và gợi ý liều lượng sản phẩm cấp ẩm phù hợp với làn da của bạn.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💧%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <main class="landing">
+    <section class="hero">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5c3.6 4.3 6 7.6 6 10.9A6 6 0 0 1 6 13.4C6 10.1 8.4 6.8 12 2.5Z"/></svg>
+        </span>
+        <span data-brand>SkinAI</span>
+      </div>
+      <h1>Hiểu làn da của bạn <em>chỉ với một bức ảnh</em></h1>
+      <p class="lead">AI phân tích độ ẩm, sắc tố và độ dầu từ ảnh khuôn mặt, kết hợp tình trạng bạn chia sẻ để gợi ý liều lượng và thời gian dùng dòng sản phẩm cấp ẩm phù hợp.</p>
+      <ul class="feature-list">
+        <li><span class="ico" aria-hidden="true">📸</span><span><b>Phân tích trong vài giây</b><br>Tải ảnh chính diện, trả lời vài câu hỏi ngắn về da.</span></li>
+        <li><span class="ico" aria-hidden="true">📈</span><span><b>Lưu lịch sử &amp; theo dõi tiến triển</b><br>So sánh độ ẩm và điểm da qua từng lần chụp.</span></li>
+        <li><span class="ico" aria-hidden="true">🧴</span><span><b>Gợi ý cá nhân hoá</b><br>Liều lượng, số lần mỗi ngày và số tuần nên dùng.</span></li>
+      </ul>
+      <p class="disclaimer">Kết quả là ước tính từ ảnh bởi AI, không thay thế chẩn đoán hay tư vấn của bác sĩ da liễu.</p>
+    </section>
+
+    <section class="card auth-card" aria-labelledby="auth-title">
+      <h2 id="auth-title" class="sr-only">Đăng nhập hoặc đăng ký</h2>
+      <div class="auth-tabs" role="tablist">
+        <button type="button" role="tab" id="tab-login" aria-selected="true" aria-controls="form-login">Đăng nhập</button>
+        <button type="button" role="tab" id="tab-register" aria-selected="false" aria-controls="form-register">Đăng ký</button>
+      </div>
+
+      <div id="auth-error" class="alert alert-error" role="alert" hidden></div>
+
+      <form id="form-login" autocomplete="on" novalidate>
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input class="input" id="login-email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="login-password">Mật khẩu</label>
+          <input class="input" id="login-password" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="btn btn-primary btn-block" type="submit">Đăng nhập</button>
+      </form>
+
+      <form id="form-register" autocomplete="on" novalidate hidden>
+        <div class="field">
+          <label for="reg-name">Họ tên</label>
+          <input class="input" id="reg-name" name="name" type="text" autocomplete="name" maxlength="100" required>
+        </div>
+        <div class="field">
+          <label for="reg-email">Email</label>
+          <input class="input" id="reg-email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="reg-password">Mật khẩu</label>
+          <input class="input" id="reg-password" name="password" type="password" autocomplete="new-password" minlength="8" required>
+          <span class="hint">Tối thiểu 8 ký tự.</span>
+        </div>
+        <label class="consent">
+          <input type="checkbox" id="reg-consent" name="consent">
+          <span>Tôi đồng ý cho phép lưu ảnh khuôn mặt và dữ liệu về da của tôi, và gửi ảnh tới nhà cung cấp AI (Anthropic) để phân tích. Tôi có thể xoá dữ liệu bất cứ lúc nào trong mục Lịch sử.</span>
+        </label>
+        <button class="btn btn-primary btn-block" type="submit">Tạo tài khoản</button>
+      </form>
+
+      <p class="disclaimer" style="text-align:center">
+        Chỉ muốn xem giao diện? <a href="app.html?demo=1">Dùng thử chế độ demo</a> (dữ liệu giả lập, không cần tài khoản).
+      </p>
+    </section>
+  </main>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản trị ảnh mẫu — SkinAI</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+  <div class="admin-wrap">
+    <p><a href="../app.html">← Quay lại ứng dụng</a></p>
+    <h1 class="page-title" style="margin-top:12px">Ảnh mẫu để "dạy" AI</h1>
+    <p class="page-sub">Tải lên ảnh da đã được chuyên gia đánh giá. Mỗi lần phân tích, AI sẽ đối chiếu với vài ảnh mẫu (chọn đều theo thang độ ẩm) để hiệu chuẩn thang điểm. Ảnh nên đa dạng: da khô/dầu/hỗn hợp, nhiều mức độ ẩm và sắc tố, nhiều tông da.</p>
+
+    <div id="admin-error" class="alert alert-error" role="alert" hidden style="margin-bottom:16px"></div>
+
+    <section class="card" id="add-card">
+      <h2 class="card-title" style="margin-bottom:14px">Thêm ảnh mẫu</h2>
+      <form id="add-form" novalidate>
+        <div class="field">
+          <label for="ref-image">Ảnh (JPG/PNG/WebP)</label>
+          <input class="input" id="ref-image" name="image" type="file" accept="image/jpeg,image/png,image/webp" required>
+        </div>
+        <div class="row">
+          <div class="field"><label for="ref-h">Độ ẩm (%)</label><input class="input" id="ref-h" name="hydration_pct" type="number" min="0" max="100" required></div>
+          <div class="field"><label for="ref-p">Sắc tố (%)</label><input class="input" id="ref-p" name="pigmentation_pct" type="number" min="0" max="100" required></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="ref-o">Độ dầu (%)</label><input class="input" id="ref-o" name="oil_pct" type="number" min="0" max="100" required></div>
+          <div class="field"><label for="ref-n">Ghi chú (tuỳ chọn)</label><input class="input" id="ref-n" name="notes" type="text" maxlength="500" placeholder="Ví dụ: da khô, bong tróc quanh mũi"></div>
+        </div>
+        <button class="btn btn-primary" type="submit" id="add-btn">Thêm ảnh mẫu</button>
+      </form>
+    </section>
+
+    <h2 class="card-title" style="margin-top:28px">Danh sách ảnh mẫu (<span id="ref-count">0</span>)</h2>
+    <div class="ref-grid" id="ref-grid"></div>
+    <div class="empty" id="ref-empty" hidden>Chưa có ảnh mẫu. AI vẫn hoạt động nhưng độ nhất quán sẽ thấp hơn.</div>
+  </div>
+
+  <div class="toasts" id="toasts"></div>
+  <script>window.SKIN_CONFIG = { brand: "SkinAI", apiBase: "../api", demo: false };</script>
+  <script src="../assets/js/util.js"></script>
+  <script src="../assets/js/image-tools.js"></script>
+  <script src="../assets/js/api.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

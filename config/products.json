@@ -1,0 +1,81 @@
+{
+  "_note": "DỮ LIỆU MẪU — thay bằng dòng sản phẩm cấp ẩm thật của bạn. AI chỉ được gợi ý các sản phẩm trong file này.",
+  "products": [
+    {
+      "id": "gel-rua-mat-cap-am",
+      "name": "Gel rửa mặt cấp ẩm",
+      "category": "Làm sạch",
+      "description": "Gel rửa mặt dịu nhẹ, không làm mất lớp ẩm tự nhiên của da.",
+      "key_ingredients": ["Glycerin", "Panthenol", "Chiết xuất lô hội"],
+      "suitable_for": ["da khô", "da thường", "da nhạy cảm"],
+      "usage": {
+        "how": "Làm ướt mặt, massage nhẹ nhàng 30–60 giây rồi rửa sạch với nước.",
+        "dose_guide": "1–2 đồng xu nhỏ (khoảng 1–2 ml) mỗi lần",
+        "max_times_per_day": 2,
+        "timing": "sáng và tối",
+        "min_weeks": 4,
+        "max_weeks": 24
+      },
+      "cautions": ["Tránh vùng mắt"],
+      "price": 189000,
+      "currency": "VND"
+    },
+    {
+      "id": "serum-ha-cap-am",
+      "name": "Serum cấp ẩm Hyaluronic Acid",
+      "category": "Tinh chất",
+      "description": "Serum HA nhiều trọng lượng phân tử giúp cấp nước tức thì và giữ ẩm sâu.",
+      "key_ingredients": ["Hyaluronic Acid", "Vitamin B5", "Betaine"],
+      "suitable_for": ["da khô", "da thiếu nước", "da hỗn hợp", "da dầu"],
+      "usage": {
+        "how": "Thoa lên da còn hơi ẩm sau bước làm sạch, vỗ nhẹ cho thấm rồi dùng kem dưỡng khoá ẩm.",
+        "dose_guide": "2–3 giọt (khoảng 0,1–0,15 ml) cho toàn mặt",
+        "max_times_per_day": 2,
+        "timing": "sáng và tối",
+        "min_weeks": 4,
+        "max_weeks": 24
+      },
+      "cautions": ["Nên thử trên vùng da nhỏ 24 giờ trước khi dùng lần đầu"],
+      "price": 359000,
+      "currency": "VND"
+    },
+    {
+      "id": "kem-duong-khoa-am",
+      "name": "Kem dưỡng khoá ẩm Ceramide",
+      "category": "Kem dưỡng",
+      "description": "Kem dưỡng phục hồi hàng rào bảo vệ da, khoá ẩm suốt 24 giờ.",
+      "key_ingredients": ["Ceramide NP", "Squalane", "Bơ hạt mỡ"],
+      "suitable_for": ["da khô", "da rất khô", "da nhạy cảm", "da thường"],
+      "usage": {
+        "how": "Thoa lớp mỏng đều lên mặt và cổ sau serum, massage đến khi thấm.",
+        "dose_guide": "Lượng bằng hạt ngô (khoảng 0,5–1 g)",
+        "max_times_per_day": 2,
+        "timing": "sáng và tối",
+        "min_weeks": 4,
+        "max_weeks": 24
+      },
+      "cautions": ["Da dầu/mụn nên dùng lượng mỏng, chỉ buổi tối"],
+      "price": 429000,
+      "currency": "VND"
+    },
+    {
+      "id": "mat-na-ngu-cap-am",
+      "name": "Mặt nạ ngủ cấp ẩm",
+      "category": "Chăm sóc chuyên sâu",
+      "description": "Mặt nạ ngủ giúp da hấp thụ độ ẩm qua đêm, sáng dậy da căng mịn.",
+      "key_ingredients": ["Hyaluronic Acid", "Glycerin", "Chiết xuất rau má"],
+      "suitable_for": ["da khô", "da xỉn màu", "da thiếu nước"],
+      "usage": {
+        "how": "Thoa một lớp dày vừa phải lên mặt như bước cuối buổi tối, để qua đêm, sáng rửa sạch.",
+        "dose_guide": "Lượng bằng đồng xu lớn (khoảng 1–1,5 g)",
+        "max_times_per_day": 1,
+        "timing": "tối, 2–3 lần mỗi tuần",
+        "min_weeks": 2,
+        "max_weeks": 12
+      },
+      "cautions": ["Không dùng chồng cùng lúc với các sản phẩm tẩy tế bào chết mạnh"],
+      "price": 299000,
+      "currency": "VND"
+    }
+  ]
+}
