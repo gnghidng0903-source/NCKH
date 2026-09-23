@@ -26,4 +26,12 @@ Options -Indexes
   Header always set X-Frame-Options "DENY"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "camera=(self), microphone=(), geolocation=()"
+
+  # sw.js PHẢI luôn được trình duyệt kiểm tra lại: cơ chế tự cập nhật của Service Worker
+  # dựa vào việc phát hiện file này đổi byte. Hostinger mặc định cache .js 7 ngày (xem sw.js
+  # để biết vì sao mọi fetch() bên trong Service Worker cũng phải né cache này) — nếu chính
+  # sw.js bị cache theo mặc định đó, trình duyệt sẽ không thấy bản mới trong nhiều ngày.
+  <FilesMatch "^sw\.js$">
+    Header always set Cache-Control "no-cache"
+  </FilesMatch>
 </IfModule>

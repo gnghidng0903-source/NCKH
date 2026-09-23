@@ -107,6 +107,8 @@ Việc đăng ký Service Worker cần một máy chủ HTTP chuẩn (Apache/Hos
 3. Chạy Lighthouse (tab **Lighthouse** trong DevTools) → mục "Installable" nên đạt PASS toàn bộ tiêu chí PWA.
 4. Test ngoại tuyến: tab **Network** → chọn "Offline" → tải lại trang đã từng mở trước đó → vẫn hiện được (bản đã lưu hoặc trang `offline.html`).
 
+**Vì sao đôi khi thấy nội dung/tên cũ dù đã deploy đúng?** Hostinger mặc định cache `.css`/`.js` **7 ngày** (`Cache-Control: max-age=604800`). Nếu ai đó đã mở site TRƯỚC khi bạn deploy, trình duyệt của họ có thể giữ bản `sw.js`/`.css`/`.js` cũ suốt 7 ngày tới bất kể server đã đúng — đây là cache của trình duyệt, không phải lỗi code hay lỗi deploy. `sw.js` đã được `.htaccess` ép `Cache-Control: no-cache` (luôn kiểm tra lại) để việc SW tự cập nhật không bị chặn bởi vấn đề này, và mọi `fetch()` bên trong `sw.js` đều né cache 7 ngày đó cho các file khác (`assets/js/*.js`, `assets/css/*.css`) — nhưng cách chắc chắn 100% để xác nhận bạn đang thấy đúng bản mới nhất là hard refresh (`Ctrl+Shift+R`) hoặc DevTools → Application → "Clear site data".
+
 ## Hướng dẫn cài đặt cho người dùng cuối
 
 ### iPhone / iPad (Safari — **bắt buộc dùng Safari**, Chrome trên iOS không cài được PWA)
