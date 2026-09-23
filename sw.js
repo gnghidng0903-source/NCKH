@@ -12,11 +12,11 @@
 //    Chỉ cần bump CACHE_VERSION khi bạn sửa chính file sw.js này (đổi chiến lược cache) và muốn
 //    buộc xoá sạch cache cũ trên máy người dùng.
 //
-// LƯU Ý QUAN TRỌNG: Hostinger mặc định trả `Cache-Control: max-age=604800` (7 ngày) cho .css/.js.
-// fetch() bên trong Service Worker vẫn tuân theo cache HTTP của trình duyệt nếu không nói rõ —
-// nên mọi fetch() network ở dưới đều dùng freshRequest() để ép bỏ qua cache đó và lấy đúng bản mới nhất.
-// Dùng cache:'no-store' (đã kiểm chứng đáng tin cậy) chứ không phải 'reload' — bản thân RUNTIME
-// cache của Service Worker đã đóng vai trò lưu tạm để phục vụ nhanh, không cần trình duyệt lưu thêm.
+// LƯU Ý: fetch() bên trong Service Worker vẫn tuân theo cache HTTP của trình duyệt nếu không nói
+// rõ, nên freshRequest() ép cache:'no-store' để chắc chắn né được cache CỦA TRÌNH DUYỆT. Nhưng
+// nguyên nhân chính khiến bản mới không hiện ngay là lớp CDN của Hostinger (hCDN) cache .css/.js
+// 7 ngày THEO ĐÚNG URL và không tự xoá khi deploy — cái đó phải sửa ở .htaccess (Cache-Control:
+// no-cache cho .css/.js), vì no-store phía client không có tác dụng với cache ở tầng CDN/server.
 const CACHE_VERSION = 'v4';
 const PRECACHE = `skinai-precache-${CACHE_VERSION}`;
 const RUNTIME = `skinai-runtime-${CACHE_VERSION}`;

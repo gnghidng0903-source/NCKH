@@ -27,11 +27,13 @@ Options -Indexes
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "camera=(self), microphone=(), geolocation=()"
 
-  # sw.js PHẢI luôn được trình duyệt kiểm tra lại: cơ chế tự cập nhật của Service Worker
-  # dựa vào việc phát hiện file này đổi byte. Hostinger mặc định cache .js 7 ngày (xem sw.js
-  # để biết vì sao mọi fetch() bên trong Service Worker cũng phải né cache này) — nếu chính
-  # sw.js bị cache theo mặc định đó, trình duyệt sẽ không thấy bản mới trong nhiều ngày.
-  <FilesMatch "^sw\.js$">
+  # QUAN TRỌNG: Hostinger có lớp CDN riêng (hCDN) cache .css/.js theo ĐÚNG URL trong 7 ngày
+  # (Cache-Control: max-age=604800 mặc định) và KHÔNG tự xoá cache khi bạn deploy file mới qua
+  # FTP — CDN vẫn phát bản cũ cho MỌI người xem, không chỉ ai từng ghé trước đó. Ép "no-cache"
+  # (không phải "no-store") để CDN/trình duyệt luôn phải hỏi lại server gốc trước khi dùng bản
+  # đã lưu: nếu file chưa đổi, server trả 304 rất nhẹ; nếu đã đổi, luôn lấy đúng bản mới nhất.
+  # Đây mới là nguyên nhân sâu xa khiến trang từng hiện tên thương hiệu cũ dù đã deploy đúng.
+  <FilesMatch "\.(css|js)$">
     Header always set Cache-Control "no-cache"
   </FilesMatch>
 </IfModule>
