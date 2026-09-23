@@ -2,9 +2,19 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>SkinAI — Phân tích da</title>
   <meta name="robots" content="noindex">
+
+  <!-- PWA: cài lên màn hình chính, mở như app riêng (standalone) -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#e8722f">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SkinAI">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -30,6 +40,7 @@
       </nav>
 
       <div class="top-actions">
+        <button class="btn btn-sm" type="button" data-pwa-install hidden>Cài đặt ứng dụng</button>
         <button class="btn btn-sm" id="btn-share" type="button">Chia sẻ</button>
         <button class="btn btn-sm" id="btn-print" type="button">In</button>
         <div class="user-menu">
@@ -219,5 +230,6 @@
   <script src="assets/js/image-tools.js"></script>
   <script src="assets/js/api.js"></script>
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/pwa.js"></script>
 </body>
 </html>

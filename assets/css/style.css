@@ -370,6 +370,12 @@ img { max-width: 100%; display: block; }
   .tiles-3, .scatter-row { grid-template-columns: 1fr; }
 }
 
+/* ---------- Chạy standalone (đã cài như app) trên iOS/Android: né tai thỏ/thanh cử chỉ ---------- */
+@media (display-mode: standalone) {
+  .shell { padding-top: max(20px, env(safe-area-inset-top)); padding-bottom: max(48px, env(safe-area-inset-bottom)); }
+  .landing { padding-top: max(32px, env(safe-area-inset-top)); padding-bottom: max(32px, env(safe-area-inset-bottom)); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }

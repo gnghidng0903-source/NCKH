@@ -1,0 +1,30 @@
+{
+  "id": "/",
+  "name": "SkinAI — Phân tích da bằng AI",
+  "short_name": "SkinAI",
+  "description": "Phân tích da bằng AI từ ảnh khuôn mặt: độ ẩm, sắc tố, độ dầu và gợi ý liều lượng sản phẩm cấp ẩm phù hợp.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#f7ede9",
+  "theme_color": "#e8722f",
+  "lang": "vi",
+  "dir": "ltr",
+  "categories": ["health", "lifestyle", "beauty"],
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Phân tích da",
+      "short_name": "Phân tích",
+      "url": "./app.html",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

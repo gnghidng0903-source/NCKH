@@ -2,9 +2,20 @@
 <html lang="vi">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>SkinAI — Phân tích da bằng AI</title>
   <meta name="description" content="Tải ảnh khuôn mặt, nhận phân tích độ ẩm, sắc tố và gợi ý liều lượng sản phẩm cấp ẩm phù hợp với làn da của bạn.">
+
+  <!-- PWA: cài lên màn hình chính, mở như app riêng (standalone) -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#e8722f">
+  <meta name="mobile-web-app-capable" content="yes">
+  <!-- iOS/Safari: các thẻ dưới đây không nằm trong chuẩn manifest, iOS chỉ đọc riêng qua meta -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SkinAI">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,6 +39,7 @@
         <li><span class="ico" aria-hidden="true">🧴</span><span><b>Gợi ý cá nhân hoá</b><br>Liều lượng, số lần mỗi ngày và số tuần nên dùng.</span></li>
       </ul>
       <p class="disclaimer">Kết quả là ước tính từ ảnh bởi AI, không thay thế chẩn đoán hay tư vấn của bác sĩ da liễu.</p>
+      <button type="button" class="btn btn-sm" data-pwa-install hidden style="margin-top:14px">Cài đặt ứng dụng</button>
     </section>
 
     <section class="card auth-card" aria-labelledby="auth-title">
@@ -81,5 +93,6 @@
   <script src="assets/js/config.js"></script>
   <script src="assets/js/api.js"></script>
   <script src="assets/js/auth.js"></script>
+  <script src="assets/js/pwa.js"></script>
 </body>
 </html>

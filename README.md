@@ -19,6 +19,7 @@ api/                        Endpoint PHP (auth, analyze, history, image, admin) 
 config/config.example.php   Mẫu cấu hình (config.php thật KHÔNG commit)
 config/products.json        Danh mục sản phẩm — AI chỉ được gợi ý trong danh sách này
 sql/schema.sql              Cấu trúc database
+manifest.json, sw.js, offline.html, assets/js/pwa.js   PWA — cài app từ trình duyệt (xem mục bên dưới)
 .github/workflows/deploy.yml  Tự deploy lên Hostinger khi push main
 ```
 
@@ -73,6 +74,60 @@ Sau đó vào `/admin/` để tải ảnh mẫu đã gán nhãn (độ ẩm/sắ
 - Chất lượng phụ thuộc vào **độ chính xác của nhãn** bạn gán: nên có chuyên gia/thiết bị đo đối chiếu.
 - Prompt caching được bật cho phần ảnh mẫu + danh mục sản phẩm để giảm chi phí các lần gọi sau.
 - **Giai đoạn 2:** khi có đủ dữ liệu có nhãn (hàng trăm–nghìn ảnh, kèm sự đồng ý của người dùng), huấn luyện model riêng và cài vào `CustomModelAnalyzer`, rồi đặt `'analyzer' => 'custom'` trong config.
+
+## PWA — cài thành app từ trình duyệt (QR code)
+
+Web này đã là một **Progressive Web App**: người dùng quét mã QR trỏ tới trang, mở bằng Safari (iPhone) hoặc Chrome (Android), cài lên màn hình chính và dùng như app thật (toàn màn hình, có icon riêng, không có thanh địa chỉ). Không cần App Store / Google Play, không cần build riêng cho iOS/Android.
+
+**Bắt buộc phải chạy trên HTTPS** (Hostinger cấp SSL miễn phí — xem mục Triển khai). PWA sẽ không cài được qua HTTP thường hay qua IP nội bộ (trừ `localhost` khi phát triển).
+
+### Cách hoạt động
+- `manifest.json` khai báo tên, icon, `display: standalone`, màu theme — quyết định app trông ra sao khi cài.
+- `sw.js` (Service Worker) chạy nền trong trình duyệt, cho phép cài đặt và mở nhanh hơn ở lần sau.
+- `assets/js/pwa.js` (đã nạp sẵn trong `index.html` và `app.html`) tự đăng ký Service Worker, hiện nút **"Cài đặt ứng dụng"** khi trình duyệt cho phép (Android/Chrome desktop), và hiện hướng dẫn thao tác tay khi mở bằng Safari iOS (vì iOS không cho web tự bật hộp thoại cài đặt).
+- `assets/icons/` chứa icon app (192/512, bản "maskable" bo theo hình tròn/vuông của từng máy, và icon riêng cho iOS).
+
+### Tự động cập nhật khi bạn deploy bản mới
+Service Worker cố tình **không lưu cứng** HTML/CSS/JS: trang luôn ưu tiên tải bản mới nhất từ mạng khi máy có Internet (network-first cho trang, stale-while-revalidate cho CSS/JS/ảnh), chỉ dùng bản đã lưu khi mất mạng. Nghĩa là:
+- Bạn deploy bản mới lên Hostinger như bình thường (`git push`) — **không cần làm gì thêm**.
+- Người dùng đã cài app sẽ thấy nội dung mới ngay trong lần mở tiếp theo có mạng, không cần gỡ cài đặt lại.
+- Nếu bạn có sửa chính `sw.js` (đổi cách cache, hiếm khi cần), người đang mở app sẽ thấy một thanh nhỏ "Đã có bản cập nhật mới — Tải lại" ở cuối màn hình.
+
+### Tạo mã QR để chia sẻ
+QR code chỉ đơn giản là ảnh mã hoá đường dẫn website (ví dụ `https://ten-mien-cua-ban.com/`). Sau khi đã deploy và có domain thật:
+1. Dùng một công cụ tạo QR miễn phí (ví dụ me-qr.com, qr-code-generator.com) hoặc mục tạo QR có sẵn trong hPanel của Hostinger.
+2. Dán đúng URL trang chủ (`index.html`) — **không** dán link tới `app.html` hay các trang admin.
+3. Tải QR về, in/chèn vào tài liệu, poster, danh thiếp…
+
+### Kiểm thử sau khi deploy
+Việc đăng ký Service Worker cần một máy chủ HTTP chuẩn (Apache/Hostinger) — **không kiểm tra được bằng máy chủ tĩnh tạm trên máy** khi phát triển, nên phần này cần bạn tự xác nhận trên bản đã deploy thật:
+
+1. Mở trang bằng Chrome desktop → F12 → tab **Application** → **Manifest**: phải thấy đúng tên, icon, không có lỗi đỏ. Tab **Service Workers**: trạng thái phải là "activated and is running".
+2. Chrome desktop → menu ⋮ → nếu thấy mục "Cài đặt SkinAI…" (hoặc icon cài đặt ⊕ trên thanh địa chỉ) nghĩa là đủ điều kiện cài đặt.
+3. Chạy Lighthouse (tab **Lighthouse** trong DevTools) → mục "Installable" nên đạt PASS toàn bộ tiêu chí PWA.
+4. Test ngoại tuyến: tab **Network** → chọn "Offline" → tải lại trang đã từng mở trước đó → vẫn hiện được (bản đã lưu hoặc trang `offline.html`).
+
+## Hướng dẫn cài đặt cho người dùng cuối
+
+### iPhone / iPad (Safari — **bắt buộc dùng Safari**, Chrome trên iOS không cài được PWA)
+1. Quét mã QR bằng Camera → mở link trong **Safari**.
+2. Bấm nút **Chia sẻ** (hình vuông có mũi tên đi lên) ở thanh dưới cùng màn hình.
+3. Kéo xuống, chọn **"Thêm vào MH chính"** (Add to Home Screen).
+4. Bấm **"Thêm"** ở góc trên bên phải.
+5. Icon SkinAI xuất hiện trên màn hình chính — mở lên sẽ chạy toàn màn hình như app thật, không còn thanh địa chỉ.
+
+*(App cũng tự hiện nút "Cài đặt ứng dụng" ngay trong trang, bấm vào sẽ hiện lại đúng 4 bước trên.)*
+
+### Android (Chrome)
+1. Quét mã QR → mở link trong **Chrome**.
+2. Cách 1 — nhanh nhất: nếu thấy banner "Thêm SkinAI vào Màn hình chính" hiện phía dưới, hoặc icon **⊕/Cài đặt** ở thanh địa chỉ, bấm vào rồi chọn **"Cài đặt"**.
+3. Cách 2 — thủ công: bấm menu **⋮** (góc trên phải) → chọn **"Cài đặt ứng dụng"** (hoặc "Thêm vào Màn hình chính") → xác nhận **"Cài đặt"**.
+4. Icon SkinAI xuất hiện trong danh sách app như một app cài từ Play Store, mở toàn màn hình.
+
+*(Trong trang cũng có sẵn nút "Cài đặt ứng dụng" ở góc trên — Chrome sẽ tự hiện hộp thoại cài đặt khi bấm.)*
+
+### Vì sao đôi khi chưa thấy nút/hộp thoại cài đặt ngay
+Chrome chỉ cho cài khi trang đáp ứng đủ điều kiện kỹ thuật (HTTPS hợp lệ, Service Worker hoạt động, manifest hợp lệ — như checklist kiểm thử ở trên) **và** đôi khi cần người dùng đã ghé trang một lần trước đó/tương tác một chút (tiêu chí "engagement" riêng của từng trình duyệt, có thể thay đổi theo phiên bản). Nếu chưa thấy, chỉ cần dùng cách thủ công (mục "Chia sẻ" trên iOS, menu ⋮ trên Android) — luôn hoạt động bất kể tiêu chí đó.
 
 ## Chấm độ chính xác của AI (`/admin/benchmark.html`)
 
