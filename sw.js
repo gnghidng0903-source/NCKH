@@ -11,18 +11,28 @@
 //    người dùng sẽ thấy ngay trong lần tải trang kế tiếp — KHÔNG cần bump số phiên bản dưới đây.
 //    Chỉ cần bump CACHE_VERSION khi bạn sửa chính file sw.js này (đổi chiến lược cache) và muốn
 //    buộc xoá sạch cache cũ trên máy người dùng.
-const CACHE_VERSION = 'v1';
+//
+// LƯU Ý QUAN TRỌNG: Hostinger mặc định trả `Cache-Control: max-age=604800` (7 ngày) cho .css/.js.
+// fetch() bên trong Service Worker vẫn tuân theo cache HTTP của trình duyệt nếu không nói rõ —
+// nên mọi fetch() network ở dưới đều dùng freshRequest() để ép bỏ qua cache đó và lấy đúng bản mới nhất.
+const CACHE_VERSION = 'v2';
 const PRECACHE = `skinai-precache-${CACHE_VERSION}`;
 const RUNTIME = `skinai-runtime-${CACHE_VERSION}`;
 const OFFLINE_URL = './offline.html';
 
 const PRECACHE_URLS = [OFFLINE_URL, './manifest.json', './assets/icons/icon-192.png'];
 
+// Bỏ qua cache HTTP của trình duyệt (và của Hostinger) — luôn hỏi thẳng mạng cho bản mới nhất.
+// mode 'navigate' không tạo lại được qua Request(); Chrome tự hạ xuống 'same-origin' nên vẫn lấy đúng nội dung.
+function freshRequest(request) {
+  return new Request(request, { cache: 'reload' });
+}
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(PRECACHE)
-      .then((cache) => cache.addAll(PRECACHE_URLS))
+      .then((cache) => cache.addAll(PRECACHE_URLS.map((url) => freshRequest(new Request(url)))))
       .then(() => self.skipWaiting())
   );
 });
@@ -44,7 +54,7 @@ self.addEventListener('activate', (event) => {
 async function networkFirstNavigate(request) {
   const cache = await caches.open(RUNTIME);
   try {
-    const fresh = await fetch(request);
+    const fresh = await fetch(freshRequest(request));
     if (fresh && fresh.ok) cache.put(request, fresh.clone());
     return fresh;
   } catch (err) {
@@ -58,7 +68,7 @@ async function networkFirstNavigate(request) {
 async function staleWhileRevalidate(request) {
   const cache = await caches.open(RUNTIME);
   const cached = await cache.match(request);
-  const networkFetch = fetch(request)
+  const networkFetch = fetch(freshRequest(request))
     .then((resp) => {
       if (resp && resp.ok) cache.put(request, resp.clone());
       return resp;

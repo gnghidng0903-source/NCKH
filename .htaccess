@@ -1,7 +1,9 @@
 Options -Indexes
 
-# Bảo vệ file nhạy cảm
-<FilesMatch "(^\.|\.(sql|md|json|lock|yml|yaml|log)$|composer\.)">
+# Bảo vệ file nhạy cảm (KHÔNG chặn .json — manifest.json ở gốc site phải công khai cho PWA;
+# các .json thật sự nhạy cảm như config/products.json đã có config/.htaccess riêng chặn cả thư mục,
+# và sql/schema.sql không được đẩy lên server — xem .github/workflows/deploy.yml)
+<FilesMatch "(^\.|\.(sql|md|lock|yml|yaml|log)$|composer\.)">
   <IfModule mod_authz_core.c>
     Require all denied
   </IfModule>
