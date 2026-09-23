@@ -15,7 +15,9 @@
 // LƯU Ý QUAN TRỌNG: Hostinger mặc định trả `Cache-Control: max-age=604800` (7 ngày) cho .css/.js.
 // fetch() bên trong Service Worker vẫn tuân theo cache HTTP của trình duyệt nếu không nói rõ —
 // nên mọi fetch() network ở dưới đều dùng freshRequest() để ép bỏ qua cache đó và lấy đúng bản mới nhất.
-const CACHE_VERSION = 'v3';
+// Dùng cache:'no-store' (đã kiểm chứng đáng tin cậy) chứ không phải 'reload' — bản thân RUNTIME
+// cache của Service Worker đã đóng vai trò lưu tạm để phục vụ nhanh, không cần trình duyệt lưu thêm.
+const CACHE_VERSION = 'v4';
 const PRECACHE = `skinai-precache-${CACHE_VERSION}`;
 const RUNTIME = `skinai-runtime-${CACHE_VERSION}`;
 const OFFLINE_URL = './offline.html';
@@ -25,7 +27,7 @@ const PRECACHE_URLS = [OFFLINE_URL, './manifest.json', './assets/icons/icon-192.
 // Bỏ qua cache HTTP của trình duyệt (và của Hostinger) — luôn hỏi thẳng mạng cho bản mới nhất.
 // mode 'navigate' không tạo lại được qua Request(); Chrome tự hạ xuống 'same-origin' nên vẫn lấy đúng nội dung.
 function freshRequest(request) {
-  return new Request(request, { cache: 'reload' });
+  return new Request(request, { cache: 'no-store' });
 }
 
 self.addEventListener('install', (event) => {
