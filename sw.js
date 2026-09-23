@@ -15,7 +15,7 @@
 // LƯU Ý QUAN TRỌNG: Hostinger mặc định trả `Cache-Control: max-age=604800` (7 ngày) cho .css/.js.
 // fetch() bên trong Service Worker vẫn tuân theo cache HTTP của trình duyệt nếu không nói rõ —
 // nên mọi fetch() network ở dưới đều dùng freshRequest() để ép bỏ qua cache đó và lấy đúng bản mới nhất.
-const CACHE_VERSION = 'v2';
+const CACHE_VERSION = 'v3';
 const PRECACHE = `skinai-precache-${CACHE_VERSION}`;
 const RUNTIME = `skinai-runtime-${CACHE_VERSION}`;
 const OFFLINE_URL = './offline.html';
@@ -32,7 +32,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(PRECACHE)
-      .then((cache) => cache.addAll(PRECACHE_URLS.map((url) => freshRequest(new Request(url)))))
+      .then((cache) => cache.addAll(PRECACHE_URLS))
       .then(() => self.skipWaiting())
   );
 });
