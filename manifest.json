@@ -1,8 +1,8 @@
 {
   "id": "/",
-  "name": "SkinAI — Phân tích da bằng AI",
-  "short_name": "SkinAI",
-  "description": "Phân tích da bằng AI từ ảnh khuôn mặt: độ ẩm, sắc tố, độ dầu và gợi ý liều lượng sản phẩm cấp ẩm phù hợp.",
+  "name": "MikiSkin — Phân tích da bằng AI",
+  "short_name": "MikiSkin",
+  "description": "MikiSkin — Phân tích da bằng AI từ ảnh khuôn mặt: độ ẩm, sắc tố, độ dầu và gợi ý liều lượng sản phẩm cấp ẩm phù hợp.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

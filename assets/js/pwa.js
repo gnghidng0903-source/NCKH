@@ -43,7 +43,7 @@
     bar.className = "pwa-update-banner";
     bar.setAttribute("role", "status");
     bar.innerHTML =
-      '<span>Đã có bản cập nhật mới của SkinAI.</span>' +
+      '<span>Đã có bản cập nhật mới của MikiSkin.</span>' +
       '<button type="button" class="btn btn-sm">Tải lại</button>';
     bar.querySelector("button").addEventListener("click", function () {
       reloading = true;
@@ -131,11 +131,11 @@
     wrap.className = "pwa-modal-backdrop";
     wrap.innerHTML =
       '<div class="pwa-modal card" role="dialog" aria-modal="true" aria-labelledby="pwa-ios-title">' +
-      '<h2 id="pwa-ios-title" class="card-title">Cài đặt SkinAI lên màn hình chính</h2>' +
+      '<h2 id="pwa-ios-title" class="card-title">Cài đặt MikiSkin lên màn hình chính</h2>' +
       '<ol class="steps">' +
       '<li><span><b>Bấm nút Chia sẻ</b>Biểu tượng hình vuông có mũi tên đi lên, nằm ở thanh dưới cùng của Safari.</span></li>' +
       '<li><span><b>Chọn "Thêm vào MH chính"</b>Add to Home Screen — kéo xuống nếu chưa thấy ngay.</span></li>' +
-      '<li><span><b>Bấm "Thêm"</b>Biểu tượng SkinAI sẽ xuất hiện trên màn hình chính như một app.</span></li>' +
+      '<li><span><b>Bấm "Thêm"</b>Biểu tượng MikiSkin sẽ xuất hiện trên màn hình chính như một app.</span></li>' +
       "</ol>" +
       '<button type="button" class="btn btn-primary btn-block">Đã hiểu</button>' +
       "</div>";

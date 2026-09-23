@@ -1,4 +1,4 @@
-// Service Worker cho SkinAI.
+// Service Worker cho MikiSkin.
 //
 // Chiến lược (mục tiêu: người dùng LUÔN thấy bản mới nhất khi có mạng, vẫn dùng được khi mất mạng):
 //   - Trang HTML (điều hướng):        network-first  → luôn lấy bản mới nhất khi online;

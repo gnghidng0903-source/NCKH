@@ -1,4 +1,4 @@
-# SkinAI — Web phân tích da bằng AI
+# MikiSkin — Web phân tích da bằng AI
 
 Người dùng tải ảnh khuôn mặt + trả lời vài câu hỏi → AI ước tính **độ ẩm, sắc tố, độ dầu, lỗ chân lông, nếp nhăn**, lưu vào lịch sử và gợi ý **liều lượng, số lần/ngày, số tuần** dùng dòng sản phẩm cấp ẩm của bạn.
 
@@ -103,7 +103,7 @@ QR code chỉ đơn giản là ảnh mã hoá đường dẫn website (ví dụ 
 Việc đăng ký Service Worker cần một máy chủ HTTP chuẩn (Apache/Hostinger) — **không kiểm tra được bằng máy chủ tĩnh tạm trên máy** khi phát triển, nên phần này cần bạn tự xác nhận trên bản đã deploy thật:
 
 1. Mở trang bằng Chrome desktop → F12 → tab **Application** → **Manifest**: phải thấy đúng tên, icon, không có lỗi đỏ. Tab **Service Workers**: trạng thái phải là "activated and is running".
-2. Chrome desktop → menu ⋮ → nếu thấy mục "Cài đặt SkinAI…" (hoặc icon cài đặt ⊕ trên thanh địa chỉ) nghĩa là đủ điều kiện cài đặt.
+2. Chrome desktop → menu ⋮ → nếu thấy mục "Cài đặt MikiSkin…" (hoặc icon cài đặt ⊕ trên thanh địa chỉ) nghĩa là đủ điều kiện cài đặt.
 3. Chạy Lighthouse (tab **Lighthouse** trong DevTools) → mục "Installable" nên đạt PASS toàn bộ tiêu chí PWA.
 4. Test ngoại tuyến: tab **Network** → chọn "Offline" → tải lại trang đã từng mở trước đó → vẫn hiện được (bản đã lưu hoặc trang `offline.html`).
 
@@ -114,15 +114,15 @@ Việc đăng ký Service Worker cần một máy chủ HTTP chuẩn (Apache/Hos
 2. Bấm nút **Chia sẻ** (hình vuông có mũi tên đi lên) ở thanh dưới cùng màn hình.
 3. Kéo xuống, chọn **"Thêm vào MH chính"** (Add to Home Screen).
 4. Bấm **"Thêm"** ở góc trên bên phải.
-5. Icon SkinAI xuất hiện trên màn hình chính — mở lên sẽ chạy toàn màn hình như app thật, không còn thanh địa chỉ.
+5. Icon MikiSkin xuất hiện trên màn hình chính — mở lên sẽ chạy toàn màn hình như app thật, không còn thanh địa chỉ.
 
 *(App cũng tự hiện nút "Cài đặt ứng dụng" ngay trong trang, bấm vào sẽ hiện lại đúng 4 bước trên.)*
 
 ### Android (Chrome)
 1. Quét mã QR → mở link trong **Chrome**.
-2. Cách 1 — nhanh nhất: nếu thấy banner "Thêm SkinAI vào Màn hình chính" hiện phía dưới, hoặc icon **⊕/Cài đặt** ở thanh địa chỉ, bấm vào rồi chọn **"Cài đặt"**.
+2. Cách 1 — nhanh nhất: nếu thấy banner "Thêm MikiSkin vào Màn hình chính" hiện phía dưới, hoặc icon **⊕/Cài đặt** ở thanh địa chỉ, bấm vào rồi chọn **"Cài đặt"**.
 3. Cách 2 — thủ công: bấm menu **⋮** (góc trên phải) → chọn **"Cài đặt ứng dụng"** (hoặc "Thêm vào Màn hình chính") → xác nhận **"Cài đặt"**.
-4. Icon SkinAI xuất hiện trong danh sách app như một app cài từ Play Store, mở toàn màn hình.
+4. Icon MikiSkin xuất hiện trong danh sách app như một app cài từ Play Store, mở toàn màn hình.
 
 *(Trong trang cũng có sẵn nút "Cài đặt ứng dụng" ở góc trên — Chrome sẽ tự hiện hộp thoại cài đặt khi bấm.)*
 
